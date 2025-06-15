@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flashcard {
+            perspective: 1000px;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+        .flashcard-front {
+            background: #f5f5f5;
+        }
+        .flashcard-back {
+            background: #e0e0e0;
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-500 to-indigo-600 min-h-screen flex items-center justify-center p-4">
+    <div class="container mx-auto max-w-2xl bg-white rounded-2xl shadow-xl p-6">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Flashcard Generator</h1>
+
+        <div class="mb-6 p-4 bg-gray-100 rounded-lg">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Generate New Flashcards</h2>
+            <div class="space-y-4">
+                <input type="text" id="subjectInput" placeholder="Subject (e.g., Python)" class="w-full p-2 border rounded-lg">
+                <textarea id="textInput" placeholder="Enter text content here..." class="w-full p-2 border rounded-lg h-32"></textarea>
+                <input type="file" id="fileInput" accept=".txt,.pdf,.csv" class="w-full p-2 border rounded-lg">
+                <button onclick="uploadContent()" class="w-full bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition">Generate Flashcards</button>
+            </div>
+        </div>
+
+        <div class="mb-6 p-4 bg-gray-100 rounded-lg">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Filter Flashcards</h2>
+            <div class="flex space-x-4">
+                <select id="difficultyFilter" class="p-2 border rounded-lg flex-1">
+                    <option value="">All Difficulties</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+                <input type="text" id="topicFilter" placeholder="Topic (e.g., Programming Basics)" class="p-2 border rounded-lg flex-1">
+                <button onclick="applyFilters()" class="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 transition">Apply Filters</button>
+            </div>
+        </div>
+
+        <div id="loadingMessage" class="text-center text-gray-600 mb-4 hidden">Loading flashcards...</div>
+        <div id="errorMessage" class="text-center text-red-600 mb-4 hidden"></div>
+        <div id="flashcardContainer" class="mb-6">
+            <div class="flashcard h-80" id="flashcard">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front shadow-lg">
+                        <div id="question" class="text-lg font-medium text-gray-800">Loading...</div>
+                        <div id="front-meta" class="text-sm text-gray-600 mt-2"></div>
+                    </div>
+                    <div class="flashcard-back shadow-lg">
+                        <div id="answer" class="text-lg font-medium text-gray-800">Loading...</div>
+                        <div id="back-meta" class="text-sm text-gray-600 mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mb-6">
+            <button onclick="flipCard()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Flip Card</button>
+            <button onclick="previousCard()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Previous</button>
+            <button onclick="nextCard()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Next</button>
+            <button onclick="exportFlashcards('json')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Export as JSON</button>
+            <button onclick="exportFlashcards('csv')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Export as CSV</button>
+        </div>
+    </div>
+
+    <script>
+        let flashcards = [];
+        let currentIndex = 0;
+
+        const flashcard = document.getElementById('flashcard');
+        const question = document.getElementById('question');
+        const answer = document.getElementById('answer');
+        const frontMeta = document.getElementById('front-meta');
+        const backMeta = document.getElementById('back-meta');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const flashcardContainer = document.getElementById('flashcardContainer');
+
+        async function fetchFlashcards() {
+            showLoading(true);
+            clearError();
+            const response = await fetch('/api/flashcards');
+            const data = await response.json();
+            if (response.ok) {
+                flashcards = data;
+                if (flashcards.length > 0) {
+                    currentIndex = 0;
+                    updateCard();
+                } else {
+                    showError("No flashcards available");
+                    question.textContent = "No flashcards available";
+                    answer.textContent = "No flashcards available";
+                    frontMeta.textContent = "";
+                    backMeta.textContent = "";
+                }
+            } else {
+                showError(data.error || "Failed to fetch flashcards");
+                question.textContent = "Error loading flashcards";
+                answer.textContent = "Error loading flashcards";
+                frontMeta.textContent = "";
+                backMeta.textContent = "";
+            }
+            showLoading(false);
+        }
+
+        async function applyFilters() {
+            showLoading(true);
+            clearError();
+            const difficulty = document.getElementById('difficultyFilter').value;
+            const topic = document.getElementById('topicFilter').value;
+            const response = await fetch('/api/flashcards/filter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ difficulty, topic })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                flashcards = data;
+                if (flashcards.length > 0) {
+                    currentIndex = 0;
+                    updateCard();
+                } else {
+                    showError("No flashcards match the selected filters");
+                    question.textContent = "No matching flashcards";
+                    answer.textContent = "No matching flashcards";
+                    frontMeta.textContent = "";
+                    backMeta.textContent = "";
+                }
+            } else {
+                showError(data.error || "Failed to apply filters");
+            }
+            showLoading(false);
+        }
+
+        async function uploadContent() {
+            showLoading(true);
+            clearError();
+            const subject = document.getElementById('subjectInput').value;
+            const textContent = document.getElementById('textInput').value;
+            const fileInput = document.getElementById('fileInput');
+            const formData = new FormData();
+            formData.append('subject', subject || 'General');
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+            } else if (textContent) {
+                formData.append('text_content', textContent);
+            } else {
+                showError("Please provide either a file or text content");
+                showLoading(false);
+                return;
+            }
+
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (response.ok) {
+                flashcards = data;
+                if (flashcards.length > 0) {
+                    currentIndex = 0;
+                    updateCard();
+                } else {
+                    showError("No flashcards generated");
+                    question.textContent = "No flashcards generated";
+                    answer.textContent = "No flashcards generated";
+                    frontMeta.textContent = "";
+                    backMeta.textContent = "";
+                }
+            } else {
+                showError(data.error || "Failed to generate flashcards");
+            }
+            showLoading(false);
+        }
+
+        function exportFlashcards(format) {
+            window.location.href = `/api/export/${format}`;
+        }
+
+        function updateCard() {
+            const card = flashcards[currentIndex];
+            question.textContent = card.question;
+            answer.textContent = card.answer;
+            const metaText = `Difficulty: ${card.difficulty} | Topic: ${card.topic || 'N/A'} | Subject: ${card.subject}`;
+            frontMeta.textContent = metaText;
+            backMeta.textContent = metaText;
+            flashcard.classList.remove('flipped');
+        }
+
+        function flipCard() {
+            flashcard.classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (flashcards.length === 0) return;
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            updateCard();
+        }
+
+        function previousCard() {
+            if (flashcards.length === 0) return;
+            currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            updateCard();
+        }
+
+        function showLoading(show) {
+            loadingMessage.classList.toggle('hidden', !show);
+            flashcardContainer.classList.toggle('hidden', show);
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        function clearError() {
+            errorMessage.textContent = '';
+            errorMessage.classList.add('hidden');
+        }
+
+        fetchFlashcards();
+    </script>
+</body>
+</html>

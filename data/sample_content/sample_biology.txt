@@ -1,0 +1,43 @@
+Cell Structure and Function
+
+The cell is the basic unit of life. All living organisms are composed of one or more cells. There are two main types of cells: prokaryotic and eukaryotic cells.
+
+Prokaryotic Cells:
+- Do not have a nucleus
+- Genetic material is freely floating in the cytoplasm
+- Examples include bacteria and archaea
+- Typically smaller and simpler in structure
+
+Eukaryotic Cells:
+- Have a membrane-bound nucleus
+- Genetic material is contained within the nucleus
+- Examples include plant cells, animal cells, and fungal cells
+- More complex internal structure with organelles
+
+Key Organelles and Their Functions:
+a
+Nucleus: Controls cell activities and contains DNA. Often called the "control center" of the cell.
+
+Mitochondria: Powerhouse of the cell. Produces ATP through cellular respiration. Plant and animal cells both have mitochondria.
+
+Chloroplasts: Found only in plant cells. Site of photosynthesis where light energy is converted to chemical energy.
+
+Ribosomes: Protein synthesis occurs here. Can be free-floating or attached to endoplasmic reticulum.
+
+Endoplasmic Reticulum (ER):
+- Rough ER: Has ribosomes attached, involved in protein synthesis
+- Smooth ER: No ribosomes, involved in lipid synthesis and detoxification
+
+Golgi Apparatus: Modifies, packages, and ships proteins from the ER. Acts like a post office for the cell.
+
+Lysosomes: Contain digestive enzymes. Break down waste materials and worn-out organelles. Found mainly in animal cells.
+
+Cell Membrane: Semi-permeable barrier that controls what enters and exits the cell. Made of phospholipid bilayer.
+
+Cell Wall: Found in plant cells, fungi, and bacteria. Provides structural support and protection. Made of cellulose in plants.
+
+Vacuoles: Storage organelles. Plant cells have one large central vacuole, while animal cells have several smaller vacuoles.
+
+Cell Transport:
+Passive transport does not require energy and includes diffusion and osmosis.
+Active transport requires energy (ATP) to move substances against concentration gradients.

@@ -1,0 +1,17 @@
+Photosynthesis Overview
+
+Photosynthesis is a vital biological process that allows plants, algae, and some bacteria to convert light energy into chemical energy stored in glucose. This process primarily occurs in the chloroplasts, which contain the pigment chlorophyll. Chlorophyll absorbs light energy, typically from the sun, and uses it to combine carbon dioxide (CO2) from the air with water (H2O) from the soil.
+
+The overall chemical equation for photosynthesis is:
+6CO2 + 6H2O + light energy → C6H12O6 + 6O2
+
+Stages of Photosynthesis:
+1. Light-dependent reactions: These occur in the thylakoid membranes of the chloroplasts. Light energy splits water molecules into oxygen (O2), protons (H+), and electrons. This process also produces ATP and NADPH, which are energy carriers.
+2. Light-independent reactions (Calvin Cycle): These occur in the stroma of the chloroplasts. Using ATP and NADPH from the light-dependent reactions, CO2 is fixed into a series of reactions to produce glucose (C6H12O6).
+
+Key Components:
+- Chlorophyll: The primary pigment that absorbs blue and red light, reflecting green, which is why plants appear green.
+- Stomata: Small openings on leaves that allow CO2 to enter and O2 to exit.
+- RuBisCO: An enzyme that catalyzes the first major step of carbon fixation in the Calvin Cycle.
+
+Photosynthesis is crucial for life on Earth as it produces oxygen and forms the base of the food chain.
