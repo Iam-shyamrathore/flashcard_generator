@@ -135,6 +135,15 @@ See `requirements.txt` for the full list.
 - The application requires a Gemini API key to generate flashcards. Ensure the `GEMINI_API_KEY` environment variable is set.
 - The default dataset (`geography_qa.csv`) contains geography flashcards. You can replace it with your own dataset in the `data` directory and update `app.py` accordingly.
 
+## ScreenShots
+![image](https://github.com/user-attachments/assets/f4f05afd-7a83-49d9-b513-7a9fc31cf590)
+
+![image](https://github.com/user-attachments/assets/20244c02-163d-42f4-ba2d-67da20ad097e)
+
+![image](https://github.com/user-attachments/assets/2cfbf5f5-7985-4368-90f8-2ece16ef7925)
+
+
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
