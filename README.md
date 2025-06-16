@@ -111,7 +111,7 @@ This will return a JSON array of flashcards, such as:
 flashcard_generator/
 ├── app.py               # Flask backend
 ├── index.html           # Frontend UI
-├── data/                # Default data files (e.g., geography_qa.csv)
+├── data/                # Default data files 
 ├── src/                 # Core logic
 │   ├── content_processor.py
 │   ├── llm_integration.py
@@ -133,7 +133,6 @@ See `requirements.txt` for the full list.
 ## Notes
 
 - The application requires a Gemini API key to generate flashcards. Ensure the `GEMINI_API_KEY` environment variable is set.
-- The default dataset (`geography_qa.csv`) contains geography flashcards. You can replace it with your own dataset in the `data` directory and update `app.py` accordingly.
 
 ## ScreenShots
 ![image](https://github.com/user-attachments/assets/f4f05afd-7a83-49d9-b513-7a9fc31cf590)
